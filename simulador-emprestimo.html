@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simule seu empréstimo</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #DEEBF7;
+      margin: 10px;
+      padding: 0;
+      color: #004771;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 10px;
+    }
+    p {
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+    select, input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      color: #363F46;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #ffef03;
+      color: #004771;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    h3 {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+      color: #363F46;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h2>Simule seu empréstimo</h2>
+  <p>Valor: <input type="text" id="valor" value="R$ 1.000,00"></p>
+  <p>Bandeira do cartão: 
+    <select id="bandeira">
+      <option value="Visa ou Master">Visa ou Master</option>
+      <option value="Outras">Outras</option>
+    </select>
+  </p>
+  <p>Número de parcelas: 
+    <select id="parcelas">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+    </select>
+  </p>
+  <button onclick="Simular()">Simular</button>
+  <h3>Resultados:</h3>
+  <table id="resultados">
+    <thead>
+      <tr>
+        <th>Total a pagar</th>
+        <th>Valor da parcela</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    var taxas = {
+      "Visa ou Master": ["2.96%", "4.10%", "4.70%", "5.29%", "5.89%", "6.48%", "7.12%", "7.70%", "8.27%", "8.84%", "9.42%", "9.97%", "10.53%", "11.08%", "11.63%", "12.17%", "12.71%", "13.24%"],
+      "Outras": ["3.29%", "4.25%", "4.85%", "5.44%", "6.04%", "6.63%", "7.32%", "7.90%", "8.47%", "9.04%", "9.62%", "10.17%", "10.73%", "11.28%", "11.83%", "12.37%", "12.91%", "13.44%"]
+    };
+    var taxa = 4.5 / 100;
+    function Simular() {
+      var valor = parseFloat(document.getElementById("valor").value.replace('R$ ', '').replace('.', '').replace(',', '.'));
+      var bandeira = document.getElementById("bandeira").value;
+      var parcelas = document.getElementById("parcelas").value;
+      var resultados = document.querySelector("#resultados tbody");
+      resultados.innerHTML = "";
+      var taxaAtual = parseFloat(taxas[bandeira][parcelas - 1]) / 100;
+      var totalTaxa = taxa + taxaAtual;
+      var cobrarCliente = valor / (1 - totalTaxa);
+      var valorParcela = cobrarCliente / parcelas;
+      var row = resultados.insertRow(0);
+      row.insertCell(0).innerHTML = "R$ " + cobrarCliente.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+      row.insertCell(1).innerHTML = "R$ " + valorParcela.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
+  </script>
+</body>
+</html>
